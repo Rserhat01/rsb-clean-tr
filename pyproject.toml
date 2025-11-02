@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rsb-clean-tr"
+version = "0.2.2"
+description = "Clean and normalize Turkish datasets — by RSB (Reşit Serhat Bağlam)."
+readme = "README.md"
+authors = [
+  { name="Reşit Serhat Bağlam", email="rsb7221@gmail.com" }
+]
+license = { text = "MIT License" }
+keywords = [
+    "data-cleaning",
+    "turkey",
+    "pandas",
+    "etl",
+    "rsb",
+    "veri-temizleme",
+    "tckn",
+    "turkish-data"
+]
+requires-python = ">=3.9"
+
+dependencies = [
+    "pandas>=1.5",
+    "numpy>=1.24",
+    "python-dateutil>=2.8.2"
+]
+
+[project.urls]
+Homepage = "https://github.com/Rserhat01/rsb-clean"
+Documentation = "https://github.com/Rserhat01/rsb-clean#readme"
+Issues = "https://github.com/Rserhat01/rsb-clean/issues"
+Changelog = "https://github.com/Rserhat01/rsb-clean/blob/main/CHANGELOG.md"

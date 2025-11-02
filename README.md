@@ -1,0 +1,203 @@
+
+```toml
+[build-system]
+requires = ["setuptools>=68.0", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clean-tr"
+version = "0.2.0"
+description = "A modern data cleaning toolkit for Turkey — normalize money, dates, booleans, cities, phones, emails, percentages and TCKNs."
+readme = "README.md"
+authors = [
+  { name="Reşit Serhat Bağlam", email="example@example.com" }
+]
+license = { text = "MIT License" }
+keywords = [
+    "data-cleaning",
+    "data-preprocessing",
+    "turkey",
+    "pandas",
+    "etl",
+    "data-quality",
+    "turkce",
+    "tckn",
+    "email-validation"
+]
+requires-python = ">=3.9"
+
+dependencies = [
+    "pandas>=1.5",
+    "numpy>=1.24",
+    "python-dateutil>=2.8.2"
+]
+
+[project.urls]
+Homepage = "https://github.com/Rserhat01/clean-tr"
+Documentation = "https://github.com/Rserhat01/clean-tr#readme"
+Issues = "https://github.com/Rserhat01/clean-tr/issues"
+Changelog = "https://github.com/Rserhat01/clean-tr/blob/main/CHANGELOG.md"
+```
+
+---
+
+## 📘 `README.md`
+
+
+````markdown
+# 🇹🇷 clean-tr  
+### A modern, Python-based data cleaning toolkit for Turkey  
+
+**clean-tr** is an open-source Python package built for data scientists, analysts, and AI engineers working with **Turkish datasets**.  
+It provides *ready-to-use* cleaning functions for:
+- Currency normalization (`₺`, `TL`, `$`, etc.)
+- Date parsing (`12.03.2024`, `12 Mart 2024`, `2024/3/12`)
+- Boolean mapping (`Evet/Hayır`, `1/0`, `True/False`)
+- City standardization (`ist.`, `34`, `maras`, etc.)
+- Phone number normalization (`+905321112233`)
+- Email validation (`lowercasing`, syntax checks)
+- Percent parsing (`%12,5`, `12,5%`, `0.85`)
+- T.C. Identity Number (TCKN) validation  
+
+---
+
+## 🚀 Installation
+
+```bash
+pip install clean-tr
+````
+
+Or for local development:
+
+```bash
+git clone https://github.com/Rserhat01/clean-tr.git
+cd clean-tr
+pip install -e .
+```
+
+---
+
+## 💡 Quick Example (with Turkish dataset)
+
+```python
+import pandas as pd
+import rsb_clean_tr as ctr
+
+df = pd.DataFrame({
+    "ucret": ["12.345,90 TL", "1,234.50$", None],
+    "aktif_mi": ["Evet", "Hayır", "bilinmiyor"],
+    "tarih": ["12.03.2024", "2024/3/12", "bozuk"],
+    "il": ["34", "ist.", "maras", "46", "Adana"],
+    "telefon": ["0532 111 22 33", "+90 (555) 444 33 22", "0000000000", None],
+    "email": ["TEST@GMAIL.COM", "kötü mail", "  user@example.org "],
+    "yuzde": ["%12,5", "0.85", "12,5%"],
+    "tckn": ["10000000146", "12345678901", "  01234567890   "]
+})
+
+df = (
+    df.pipe(ctr.clean_money, "ucret")
+    .pipe(ctr.clean_bool, "aktif_mi")
+    .pipe(ctr.clean_date, "tarih", output_format="string")
+    .pipe(ctr.standardize_city, "il")
+    .pipe(ctr.clean_phone, "telefon")
+    .pipe(ctr.validate_email, "email")
+    .pipe(ctr.clean_percent, "yuzde")
+    .pipe(ctr.clean_tckn, "tckn")
+)
+
+print(df)
+```
+
+Output:
+
+```
+      ucret  aktif_mi      tarih             il        telefon             email  yuzde         tckn
+0  12345.90      True  2024-03-12       İstanbul  +905321112233    test@gmail.com  12.50  10000000146
+1   1234.50     False  2024-03-12  Kahramanmaraş  +905554443322             None   0.85          None
+2       NaN       NaN        None          Adana            NaN  user@example.org  12.50  01234567890
+```
+
+---
+
+## 🧠 Supported Cleaning Functions
+
+| Function             | Description                | Example Input         | Example Output  |
+| -------------------- | -------------------------- | --------------------- | --------------- |
+| `clean_money()`      | Normalize monetary strings | `12.345,90 TL`        | `12345.90`      |
+| `clean_bool()`       | Convert textual booleans   | `Evet` / `1` / `True` | `True`          |
+| `clean_date()`       | Normalize dates            | `12 Mart 2024`        | `2024-03-12`    |
+| `standardize_city()` | Match all Turkish cities   | `ist.` / `34`         | `İstanbul`      |
+| `clean_phone()`      | Normalize Turkish numbers  | `0532 111 22 33`      | `+905321112233` |
+| `validate_email()`   | Check & normalize emails   | `TEST@MAIL.COM`       | `test@mail.com` |
+| `clean_percent()`    | Parse percentages          | `%12,5`               | `12.5`          |
+| `clean_tckn()`       | Validate TCKN numbers      | `10000000146`         | `10000000146`   |
+
+---
+
+## 📊 Use Cases
+
+✅ ETL pipelines (pandas-based)
+✅ Turkish e-commerce, finance or CRM data cleaning
+✅ AI/NLP preprocessing for Turkish text datasets
+✅ Business Intelligence (BI) data normalization
+✅ Machine Learning feature preparation
+
+---
+
+## 🧱 Project Structure
+
+```
+clean_tr/
+│
+├─ cleaners.py     # main cleaning functions
+├─ mappings.py     # bool + city dictionaries
+├─ utils.py        # helper parsing methods
+└─ __init__.py
+```
+
+---
+
+## 🧩 Dependencies
+
+* pandas ≥ 1.5
+* numpy ≥ 1.24
+* python-dateutil ≥ 2.8.2
+
+---
+
+## 🧾 License
+
+MIT License © 2025 Reşit Serhat Bağlam
+
+---
+
+## 🌟 Vision
+
+> *clean-tr aims to be the standard data cleaning library for Turkish datasets.*
+> Developed with precision, cultural context, and practicality — for anyone who works with data in Turkey.
+
+---
+
+## 🌐 Connect
+
+* GitHub: [@Rserhat01](https://github.com/Rserhat01)
+* LinkedIn: [linkedin.com/in/resitserhat](https://linkedin.com/in/resitserhat)
+* Project Issues: [Report a bug or suggest a feature](https://github.com/Rserhat01/clean-tr/issues)
+
+```
+
+---
+
+## 🎯 Ne kazandık?
+
+| Alan | Artık Nasıl Görünüyor |
+|------|------------------------|
+| **PyPI Sayfası** | Profesyonel metadata + SEO uyumlu açıklama |
+| **README** | İngilizce teknik, Türkçe örnekli; güven veriyor |
+| **Marka dili** | “Python Data Cleaning Toolkit for Turkey” |
+| **Katkı potansiyeli** | Açık kaynak katkıcıları seni ciddiye alır |
+| **Akademik / LinkedIn görünümü** | Sunumda “clean-tr: Türkiye’ye özel veri temizleme standardı” diyebilirsin |
+
+---
+
+```
